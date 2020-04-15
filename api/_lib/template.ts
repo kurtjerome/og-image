@@ -1,25 +1,30 @@
-
-import { readFileSync } from 'fs';
-import marked from 'marked';
-import { sanitizeHtml } from './sanitizer';
-import { ParsedRequest } from './types';
-const twemoji = require('twemoji');
-const twOptions = { folder: 'svg', ext: '.svg' };
+import { readFileSync } from "fs";
+import marked from "marked";
+import { sanitizeHtml } from "./sanitizer";
+import { ParsedRequest } from "./types";
+const twemoji = require("twemoji");
+const twOptions = { folder: "svg", ext: ".svg" };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
-const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
+const rglr = readFileSync(
+    `${__dirname}/../_fonts/Inter-Regular.woff2`
+).toString("base64");
+const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString(
+    "base64"
+);
+const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString(
+    "base64"
+);
 
 function getCss(theme: string, fontSize: string) {
-    let background = 'white';
-    let foreground = 'black';
-    let radial = 'lightgray';
+    let background = "white";
+    let foreground = "black";
+    let radial = "lightgray";
 
-    if (theme === 'dark') {
-        background = 'black';
-        foreground = 'white';
-        radial = 'dimgray';
+    if (theme === "dark") {
+        background = "black";
+        foreground = "white";
+        radial = "dimgray";
     }
     return `
     @font-face {
@@ -100,6 +105,18 @@ function getCss(theme: string, fontSize: string) {
         font-style: normal;
         color: ${foreground};
         line-height: 1.8;
+        justify-self: flex-start;
+        width: 100%;
+    }
+
+    .brand-name {
+        font-family: 'Inter', sans-serif;
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        opacity: 0.6;
+        margin-top: 30px;
     }`;
 }
 
@@ -117,9 +134,16 @@ export function getHtml(parsedReq: ParsedRequest) {
         <div>
             <div class="spacer">
             <div class="logo-wrapper">
-                ${images.map((img, i) =>
-                    getPlusSign(i) + getImage(img, widths[i], heights[i])
-                ).join('')}
+                ${images
+                    .map(
+                        (img, i) =>
+                            getPlusSign(i) +
+                            getImage(img, widths[i], heights[i])
+                    )
+                    .join("")}
+            </div>
+            <div class="brand-name">
+                Kurt Obispo
             </div>
             <div class="spacer">
             <div class="heading">${emojify(
@@ -131,16 +155,16 @@ export function getHtml(parsedReq: ParsedRequest) {
 </html>`;
 }
 
-function getImage(src: string, width ='auto', height = '225') {
+function getImage(src: string, width = "auto", height = "225") {
     return `<img
         class="logo"
         alt="Generated Image"
         src="${sanitizeHtml(src)}"
         width="${sanitizeHtml(width)}"
         height="${sanitizeHtml(height)}"
-    />`
+    />`;
 }
 
 function getPlusSign(i: number) {
-    return i === 0 ? '' : '<div class="plus">+</div>';
+    return i === 0 ? "" : '<div class="plus">+</div>';
 }
