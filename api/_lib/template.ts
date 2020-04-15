@@ -104,7 +104,7 @@ function getCss(theme: string, fontSize: string) {
         font-size: ${sanitizeHtml(fontSize)};
         font-style: normal;
         color: ${foreground};
-        line-height: 1.8;
+        line-height: 1.3;
         justify-self: flex-start;
         width: 100%;
     }
